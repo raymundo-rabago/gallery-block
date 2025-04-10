@@ -11,7 +11,7 @@ function Header() {
 				<img src={Logo} className="brand" alt="NASA logo" width="72px" />
 				<ul>
 					  <li><a href="#">Share</a></li>
-					  <li><button className="secondary">Reload</button></li>
+					  <li><button className="primary">Reload</button></li>
 				</ul>
 			</nav>
 		</div>

@@ -40,7 +40,7 @@ const NasaImageGrid: React.FC = () => {
 		<form onSubmit={handleSearch}>
 			<fieldset role="group">
 				<input type="text" placeholder="Buscar imágenes..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-				<input type="submit" value="Subscribe" className='primary' />
+				<input type="submit" value="Subscribe" className='contrast' />
 			</fieldset>
 		</form>
 		<br />
@@ -53,7 +53,7 @@ const NasaImageGrid: React.FC = () => {
 				<figure key={item.data[0].nasa_id}>
 					<img src={imageUrl} alt={title} />
 					<figcaption>
-						<strong>{title}</strong>
+						<strong class="primary">{title}</strong>
 						<small>{description.substring(0, 100)}...</small>
 					</figcaption>
 				</figure>

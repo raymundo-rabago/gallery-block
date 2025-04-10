@@ -36,36 +36,30 @@ const NasaImageGrid: React.FC = () => {
 
   return (
 	  <div className="container">
-		  
-      <form onSubmit={handleSearch} className="grid mb-4">
-        <input
-          type="text"
-          placeholder="Buscar imágenes..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="input"
-        />
-        <button type="submit" className="button">
-          Buscar
-        </button>
-      </form>
-
-      <div className="grid grid-cols-3 gap-4">
-        {images.map((item) => {
-          const imageUrl = item.links[0].href;
-          const title = item.data[0].title;
-          const description = item.data[0].description || 'Sin descripción';
-          return (
-            <div key={item.data[0].nasa_id} className="card">
-              <img src={imageUrl} alt={title} className="img-fluid" />
-              <div className="card-body">
-                <h3 className="card-title">{title}</h3>
-                <p className="card-text">{description.substring(0, 100)}...</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+		
+		<form onSubmit={handleSearch}>
+			<fieldset role="group">
+				<input type="text" placeholder="Buscar imágenes..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+				<input type="submit" value="Subscribe" className='primary' />
+			</fieldset>
+		</form>
+		<br />
+		<div className="grid-gallery">
+			{images.map((item) => {
+				const imageUrl = item.links[0].href;
+				const title = item.data[0].title;
+				const description = item.data[0].description || 'Sin descripción';
+				return (
+				<figure key={item.data[0].nasa_id}>
+					<img src={imageUrl} alt={title} />
+					<figcaption>
+						<strong>{title}</strong>
+						<small>{description.substring(0, 100)}...</small>
+					</figcaption>
+				</figure>
+				);
+			})}
+		</div>
     </div>
   );
 };

@@ -5,6 +5,8 @@ import { NasaItem, NasaApiResponse } from '../types/nasaTypes';
 const NasaImageGrid: React.FC = () => {
   const [images, setImages] = useState<NasaItem[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1); 
   const apiKey: string | undefined = import.meta.env.VITE_NASA_KEY;
 
   useEffect(() => {
@@ -13,10 +15,10 @@ const NasaImageGrid: React.FC = () => {
       return;
     }
     fetchImages();
-  }, []);
+  }, [currentPage]);
 
   const fetchImages = async (query: string = '') => {
-    const url = `https://images-api.nasa.gov/search?q=${query}&media_type=image`;
+    const url = `https://images-api.nasa.gov/search?q=${query}&media_type=image&page=${currentPage}`;
     try {
       const response = await fetch(url);
       if (!response.ok) {
@@ -24,6 +26,12 @@ const NasaImageGrid: React.FC = () => {
       }
       const data: NasaApiResponse = await response.json();
       setImages(data.collection.items);
+
+      // Extraer el total de páginas desde los metadatos
+      const totalPagesFromApi = Math.ceil(data.collection.metadata.total_hits / 48);
+      setTotalPages(totalPagesFromApi);
+      setImages(data.collection.items);
+
     } catch (error) {
       console.error('Error fetching images:', error);
     }
@@ -31,7 +39,14 @@ const NasaImageGrid: React.FC = () => {
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setCurrentPage(1);
     fetchImages(searchTerm);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+    }
   };
 
   return (
@@ -40,7 +55,7 @@ const NasaImageGrid: React.FC = () => {
 		<form onSubmit={handleSearch}>
 			<fieldset role="group">
 				<input type="text" placeholder="Buscar imágenes..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-				<input type="submit" value="Subscribe" className='contrast' />
+				<input type="submit" value="Buscar" className='contrast' />
 			</fieldset>
 		</form>
 		<br />
@@ -48,18 +63,27 @@ const NasaImageGrid: React.FC = () => {
 			{images.map((item) => {
 				const imageUrl = item.links[0].href;
 				const title = item.data[0].title;
-				const description = item.data[0].description || 'Sin descripción';
+        const description = item.data[0].description || 'Sin descripción';
+        const keywords = item.data[0].keywords || 'Sin descripción';
 				return (
 				<figure key={item.data[0].nasa_id}>
 					<img src={imageUrl} alt={title} />
 					<figcaption>
-						<strong class="primary">{title}</strong>
+						<strong className="primary">{title}</strong>
 						<small>{description.substring(0, 100)}...</small>
+						<p>Palabras clave: {keywords || 'Sin palabras clave'}</p>
 					</figcaption>
 				</figure>
 				);
 			})}
-		</div>
+      </div>
+      <br />
+      <div className="pagination mt-4">
+        <button className="outline contrast" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Anterior</button>
+        <span className="mx-4">Página {currentPage} de {totalPages}</span>
+        <button className="outline contrast" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Siguiente</button>
+      </div>
+
     </div>
   );
 };

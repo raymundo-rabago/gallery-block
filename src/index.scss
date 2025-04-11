@@ -28,6 +28,15 @@
   @media (width >= 480px) {
     grid-template-columns: repeat(2, 1fr);
   }
+  @media (width >= 772px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media (width >= 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  @media (width >= 1600px) {
+    grid-template-columns: repeat(5, 1fr); 
+  }
 
   figure{
     img{
@@ -45,5 +54,63 @@
         font-size: 0.8em;
       }
     }
+  }
+}
+
+.card {
+  box-shadow: 0 0 5px 2px #dddddd;
+  margin-bottom: 2em;
+}
+.card-header {
+  background-color: var(--pico-primary);
+  color: var(--pico-white);
+  padding: 1em;
+  h2 {
+    margin: 0;
+    font-size: 1.5em;
+  }
+}
+.card-body {
+  padding: 1em;
+  p {
+    margin: 0;
+    font-size: 1em;
+  }
+}
+.card-footer {
+  background-color: var(--pico-light);
+  padding: 1em;
+  text-align: center;
+  a {
+    color: var(--pico-primary);
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+.button {
+  margin: 0 8px;
+  &:hover {
+    background-color: var(--pico-primary);
+    color: var(--pico-white);
+  }
+}
+.button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1em 0;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em 0;
+  border-top: #ddd 1px solid;
+  margin-top: 2em;
+  span{margin: 0 1em;}
+  .button {
+    margin: 0 8px;
   }
 }
